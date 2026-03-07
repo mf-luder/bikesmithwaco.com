@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cousine&display=swap" rel="stylesheet">
     <title>Shop Mockup</title>
     <style>
-        /* Design tokens for consistent color and spacing management */
+        /* DESIGN TOKENS: Central variables for consistent theme management */
         :root {
             --bg-main: #161819;
             --bg-content: #1d1f1f;
@@ -28,7 +28,7 @@
             height: 100%; 
         }
 
-        /* Flexbox body ensures the content is vertically stacked and horizontally centered */
+        /* LAYOUT CORE: Flexbox body handles the vertical stacking of header and content */
         body {
             background-color: var(--bg-main);
             color: var(--text-main);
@@ -40,7 +40,7 @@
             align-items: center;
         }
 
-        /* Semantic header wrapper maintains 100% width for the diamond divider pattern */
+        /* SEMANTIC HEADER: Ensures branding elements span the full viewport width */
         header {
             width: 100%;
             display: flex;
@@ -48,7 +48,7 @@
             align-items: center;
         }
 
-        /* Hides functional radio buttons/checkboxes visually while keeping them accessible to the logic */
+        /* STATE MANAGEMENT: Hides radio/checkbox inputs while maintaining keyboard accessibility */
         input[type="radio"], #shop-toggle {
             position: absolute;
             width: 1px;
@@ -61,7 +61,7 @@
             border: 0;
         }
 
-        /* Uses CSS Grid to stack the logo and diamond divider in the same coordinate space */
+        /* HERO AREA: CSS Grid layers the logo and diamond divider in a single stacking context */
         .hero-container {
             display: grid;
             place-items: center;
@@ -70,7 +70,6 @@
             margin-bottom: -80px;
         }
 
-        /* Forces all children of the hero container into the first grid cell for layering */
         .hero-container > * {
             grid-area: 1 / 1;
         }
@@ -79,7 +78,7 @@
             max-width: 100%; 
             height: auto; 
             z-index: 2;
-            pointer-events: none; /* Prevents the image from intercepting clicks intended for elements behind it */
+            pointer-events: none;
             transform: translateY(0px);
         }
 
@@ -93,7 +92,7 @@
             transform: translateY(0px);
         }
 
-        /* Intro section uses relative positioning and z-index to sit 'above' the logo's transparent box */
+        /* INTRO SECTION: Centered contact and slogan block with z-index for layering resolution */
         .intro {
             display: flex; 
             justify-content: center; 
@@ -112,7 +111,7 @@
         .center { text-align: center; font-weight: 700; letter-spacing: 2px; margin-bottom: -1rem; }
         .right { text-align: right; font-family: 'Cousine', sans-serif; margin-bottom: 1rem; }
 
-        /* Main content card containing the navigation and the tab panes */
+        /* CONTENT CARD: The primary container for navigation and information panes */
         .content {
             max-width: 1080px; 
             width: 100%; 
@@ -128,7 +127,7 @@
             width: 100%;
         }
 
-        /* Navigation menus. calc() is used to offset the container padding for a full-width border-bottom */
+        /* NAVIGATION: Flex-based menus. Width calculations compensate for container padding */
         .tab-menu, .shop-menu { 
             display: flex; 
             width: calc(100% + (2 * var(--content-padding)));
@@ -139,7 +138,7 @@
         
         .shop-menu { display: none; }
 
-        /* Styling for the labels that act as the visible buttons for the hidden radio inputs */
+        /* NAV LABELS: Stylized touch targets that trigger the hidden radio state changes */
         .tab-menu label, .shop-menu label { 
             padding: 10px 20px; 
             cursor: pointer; 
@@ -156,7 +155,7 @@
             color: var(--text-intro); 
         }
 
-        /* Search input styling with focus-visible for keyboard accessibility */
+        /* SEARCH INPUT: Styled for consistent visual weight with menu labels */
         #shop-search {
             flex-grow: 1;
             background-color: var(--bg-search);
@@ -183,13 +182,13 @@
             background-color: var(--bg-search-selected);
         }
 
-        /* Logic to swap between the main site menu and the online shop menu via checkbox */
+        /* VIEW TOGGLING: Logic for swapping between the Main Menu and Shop Menu */
         #shop-toggle:checked ~ .tabs .tab-menu { display: none; }
         #shop-toggle:checked ~ .tabs .shop-menu { display: flex; }
         
         .pane { display: none; animation: fadeIn 0.4s ease; }
         
-        /* Main Tab Switching Logic: Maps specific radio inputs to their corresponding content panes */
+        /* TAB LOGIC: Correlates checked input state to the visibility of specific content divs */
         #shop-toggle:not(:checked) ~ .tabs #tab1:checked ~ .tab-panes #pane1,
         #shop-toggle:not(:checked) ~ .tabs #tab2:checked ~ .tab-panes #pane2,
         #shop-toggle:not(:checked) ~ .tabs #tab3:checked ~ .tab-panes #pane3,
@@ -199,7 +198,6 @@
             display: block; 
         }
 
-        /* Shop Tab Switching Logic: Active only when shop-toggle is checked */
         #shop-toggle:checked ~ .tabs #shop1:checked ~ .tab-panes #spane1,
         #shop-toggle:checked ~ .tabs #shop2:checked ~ .tab-panes #spane2,
         #shop-toggle:checked ~ .tabs #shop3:checked ~ .tab-panes #spane3,
@@ -209,7 +207,7 @@
             display: block; 
         }
 
-        /* Overrides to show the search pane and dim labels when the search bar is focused */
+        /* SEARCH FOCUS OVERRIDES: Forces the search pane to show when the input is active */
         .shop-menu:focus-within ~ .tab-panes .pane { display: none !important; }
         .shop-menu:focus-within ~ .tab-panes #spane-search { display: block !important; }
         .shop-menu:focus-within label { color: var(--text-dim) !important; background-color: transparent !important; }
@@ -219,7 +217,7 @@
         .shop-menu label[for="shop-toggle"] { color: var(--text-dim); border-right: none; }
         .tab-menu label:first-child, .shop-menu label:first-child { border-left: none; }
 
-        /* Consolidated highlight styles for the active tab across both navigation groups */
+        /* SELECTION HIGHLIGHTS: Unified styling for the currently active tab */
         [name="main-tabs"]#tab1:checked ~ .tab-menu label[for="tab1"],
         [name="main-tabs"]#tab2:checked ~ .tab-menu label[for="tab2"],
         [name="main-tabs"]#tab3:checked ~ .tab-menu label[for="tab3"],
@@ -233,6 +231,55 @@
         [name="shop-tabs"]#shop5:checked ~ .shop-menu label[for="shop5"] {
             color: var(--text-selected); 
             background-color: var(--bg-selected);
+        }
+
+        /* -------------------------------------------------------------------------- */
+        /* MOBILE OVERRIDES: Responsive adjustments for small viewports (< 768px)     */
+        /* -------------------------------------------------------------------------- */
+        @media (max-width: 768px) {
+            :root {
+                --content-padding: 1rem; /* Reclaim horizontal space for mobile text */
+            }
+
+            .hero-container {
+                margin-top: 0;
+                margin-bottom: -40px; /* Reduced vertical overlap to save screen height */
+            }
+
+            /* Stack intro items vertically to avoid horizontal collision */
+            .intro {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+                margin-top: 2rem;
+            }
+
+            .intro-item {
+                width: 100%;
+                text-align: center !important;
+                margin-bottom: 0;
+            }
+
+            /* Multi-row menu layout: Labels wrap instead of causing horizontal overflow */
+            .tab-menu, .shop-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            /* Increased touch targets and row wrapping for easier thumb navigation */
+            .tab-menu label, .shop-menu label, #shop-search {
+                flex: 1 1 auto;
+                text-align: center;
+                min-width: 120px;
+                border: 1px solid var(--border-color) !important;
+            }
+
+            /* Anchors the toggle label as a dedicated row at the bottom of the menu */
+            .tab-menu label[for="shop-toggle"], 
+            .shop-menu label[for="shop-toggle"] {
+                width: 100%;
+                margin-left: 0;
+            }
         }
 
         @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
@@ -313,7 +360,6 @@
     </div>
 
     <script>
-        // Synchronizes the search input focus state with the underlying radio logic for tab consistency
         document.getElementById('shop-search').addEventListener('focus', () => {
             document.getElementById('shop-search-radio').checked = true;
         });
