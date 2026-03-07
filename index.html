@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@360;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cousine&display=swap" rel="stylesheet">
+    <title>Shop Mockup</title>
+    <style>
+        /* Design tokens for consistent color and spacing management */
+        :root {
+            --bg-main: #161819;
+            --bg-content: #1d1f1f;
+            --bg-hover: #262728;
+            --bg-selected: #7d8473;
+            --bg-search: #111;
+            --bg-search-hover: #000;
+            --bg-search-selected: #000;
+            --border-color: #262728;
+            --text-main: #f6f9f2;
+            --text-intro: #f6ffe9;
+            --text-dim: #a3aba3;
+            --text-selected: #fff;
+            --content-padding: 2rem;
+        }
+
+        html, body { 
+            height: 100%; 
+        }
+
+        /* Flexbox body ensures the content is vertically stacked and horizontally centered */
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 360;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Semantic header wrapper maintains 100% width for the diamond divider pattern */
+        header {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Hides functional radio buttons/checkboxes visually while keeping them accessible to the logic */
+        input[type="radio"], #shop-toggle {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Uses CSS Grid to stack the logo and diamond divider in the same coordinate space */
+        .hero-container {
+            display: grid;
+            place-items: center;
+            width: 100%;
+            margin-top: -20px;
+            margin-bottom: -80px;
+        }
+
+        /* Forces all children of the hero container into the first grid cell for layering */
+        .hero-container > * {
+            grid-area: 1 / 1;
+        }
+
+        .header-image { 
+            max-width: 100%; 
+            height: auto; 
+            z-index: 2;
+            pointer-events: none; /* Prevents the image from intercepting clicks intended for elements behind it */
+            transform: translateY(0px);
+        }
+
+        .divider {
+            width: 100%; 
+            height: 40px; 
+            background-image: url('diamonds.png');
+            background-repeat: repeat-x; 
+            background-position: center;
+            z-index: 1;
+            transform: translateY(0px);
+        }
+
+        /* Intro section uses relative positioning and z-index to sit 'above' the logo's transparent box */
+        .intro {
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            width: 100%; 
+            max-width: 960px; 
+            margin-top: 1rem; 
+            margin-bottom: 0.5rem; 
+            color: var(--text-intro); 
+            position: relative; 
+            z-index: 3;
+        }
+
+        .intro-item { flex: 1; font-weight: 500; font-size: 0.9rem; }
+        .left { text-align: left; font-family: 'Cousine', sans-serif; margin-bottom: 1rem; }
+        .center { text-align: center; font-weight: 700; letter-spacing: 2px; margin-bottom: -1rem; }
+        .right { text-align: right; font-family: 'Cousine', sans-serif; margin-bottom: 1rem; }
+
+        /* Main content card containing the navigation and the tab panes */
+        .content {
+            max-width: 1080px; 
+            width: 100%; 
+            background-color: var(--bg-content); 
+            padding: 0 var(--content-padding) var(--content-padding) var(--content-padding); 
+            border-radius: 6px; 
+            border: 2px solid var(--border-color);
+            box-sizing: border-box; 
+            flex-grow: 1;
+        }
+
+        main {
+            width: 100%;
+        }
+
+        /* Navigation menus. calc() is used to offset the container padding for a full-width border-bottom */
+        .tab-menu, .shop-menu { 
+            display: flex; 
+            width: calc(100% + (2 * var(--content-padding)));
+            margin-left: calc(-1 * var(--content-padding));
+            margin-bottom: 19px; 
+            border-bottom: 1px solid var(--border-color); 
+        }
+        
+        .shop-menu { display: none; }
+
+        /* Styling for the labels that act as the visible buttons for the hidden radio inputs */
+        .tab-menu label, .shop-menu label { 
+            padding: 10px 20px; 
+            cursor: pointer; 
+            font-weight: 500; 
+            color: var(--text-dim); 
+            transition: all 0.3s; 
+            border: 1px solid var(--border-color); 
+            border-top: none; 
+            font-family: 'Cousine', monospace; 
+        }
+        
+        .tab-menu label:hover, .shop-menu label:hover { 
+            background-color: var(--bg-hover); 
+            color: var(--text-intro); 
+        }
+
+        /* Search input styling with focus-visible for keyboard accessibility */
+        #shop-search {
+            flex-grow: 1;
+            background-color: var(--bg-search);
+            border: 1px solid var(--border-color);
+            border-top: none;
+            color: var(--text-dim);
+            padding: 10px 20px;
+            font-family: 'Cousine', monospace;
+            font-size: 1rem;
+            transition: color 0.3s, background-color 0.3s;
+        }
+
+        #shop-search::placeholder { color: var(--text-dim); }
+        #shop-search:hover { background-color: var(--bg-search-hover); }
+        
+        #shop-search:focus-visible {
+            outline: 2px solid var(--bg-selected);
+            outline-offset: -2px;
+        }
+
+        #shop-search:focus,
+        #shop-search-radio:checked ~ .shop-menu #shop-search { 
+            color: var(--text-selected); 
+            background-color: var(--bg-search-selected);
+        }
+
+        /* Logic to swap between the main site menu and the online shop menu via checkbox */
+        #shop-toggle:checked ~ .tabs .tab-menu { display: none; }
+        #shop-toggle:checked ~ .tabs .shop-menu { display: flex; }
+        
+        .pane { display: none; animation: fadeIn 0.4s ease; }
+        
+        /* Main Tab Switching Logic: Maps specific radio inputs to their corresponding content panes */
+        #shop-toggle:not(:checked) ~ .tabs #tab1:checked ~ .tab-panes #pane1,
+        #shop-toggle:not(:checked) ~ .tabs #tab2:checked ~ .tab-panes #pane2,
+        #shop-toggle:not(:checked) ~ .tabs #tab3:checked ~ .tab-panes #pane3,
+        #shop-toggle:not(:checked) ~ .tabs #tab4:checked ~ .tab-panes #pane4,
+        #shop-toggle:not(:checked) ~ .tabs #tab5:checked ~ .tab-panes #pane5,
+        #shop-toggle:not(:checked) ~ .tabs #tab6:checked ~ .tab-panes #pane6 { 
+            display: block; 
+        }
+
+        /* Shop Tab Switching Logic: Active only when shop-toggle is checked */
+        #shop-toggle:checked ~ .tabs #shop1:checked ~ .tab-panes #spane1,
+        #shop-toggle:checked ~ .tabs #shop2:checked ~ .tab-panes #spane2,
+        #shop-toggle:checked ~ .tabs #shop3:checked ~ .tab-panes #spane3,
+        #shop-toggle:checked ~ .tabs #shop4:checked ~ .tab-panes #spane4,
+        #shop-toggle:checked ~ .tabs #shop5:checked ~ .tab-panes #spane5,
+        #shop-toggle:checked ~ .tabs #shop-search-radio:checked ~ .tab-panes #spane-search { 
+            display: block; 
+        }
+
+        /* Overrides to show the search pane and dim labels when the search bar is focused */
+        .shop-menu:focus-within ~ .tab-panes .pane { display: none !important; }
+        .shop-menu:focus-within ~ .tab-panes #spane-search { display: block !important; }
+        .shop-menu:focus-within label { color: var(--text-dim) !important; background-color: transparent !important; }
+        .shop-menu:focus-within label:hover { background-color: var(--bg-hover) !important; color: var(--text-intro) !important; }
+
+        .tab-menu label[for="shop-toggle"] { margin-left: auto; color: var(--text-dim); border-right: none; }
+        .shop-menu label[for="shop-toggle"] { color: var(--text-dim); border-right: none; }
+        .tab-menu label:first-child, .shop-menu label:first-child { border-left: none; }
+
+        /* Consolidated highlight styles for the active tab across both navigation groups */
+        [name="main-tabs"]#tab1:checked ~ .tab-menu label[for="tab1"],
+        [name="main-tabs"]#tab2:checked ~ .tab-menu label[for="tab2"],
+        [name="main-tabs"]#tab3:checked ~ .tab-menu label[for="tab3"],
+        [name="main-tabs"]#tab4:checked ~ .tab-menu label[for="tab4"],
+        [name="main-tabs"]#tab5:checked ~ .tab-menu label[for="tab5"],
+        [name="main-tabs"]#tab6:checked ~ .tab-menu label[for="tab6"],
+        [name="shop-tabs"]#shop1:checked ~ .shop-menu label[for="shop1"],
+        [name="shop-tabs"]#shop2:checked ~ .shop-menu label[for="shop2"],
+        [name="shop-tabs"]#shop3:checked ~ .shop-menu label[for="shop3"],
+        [name="shop-tabs"]#shop4:checked ~ .shop-menu label[for="shop4"],
+        [name="shop-tabs"]#shop5:checked ~ .shop-menu label[for="shop5"] {
+            color: var(--text-selected); 
+            background-color: var(--bg-selected);
+        }
+
+        @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="hero-container">
+            <div class="divider"></div>
+            <img src="Bikesmith_logo1_custom.png" alt="Header Image" class="header-image">
+        </div>
+
+        <div class="intro">
+            <div class="intro-item left">
+                245-300-5222<br>ride@bikesmithwaco.com<br>Tue—Sat 10:00—6:00
+            </div>
+            <div class="intro-item center">WE FIX IT, YOU SEND IT</div>
+            <div class="intro-item right">
+                720 Elm Ave<br>Waco Texas<br>Est. 2021
+            </div>
+        </div>
+    </header>
+
+    <div class="content">
+        <input type="checkbox" id="shop-toggle">
+        
+        <div class="tabs">
+            <input type="radio" name="main-tabs" id="tab1" checked>
+            <input type="radio" name="main-tabs" id="tab2">
+            <input type="radio" name="main-tabs" id="tab3">
+            <input type="radio" name="main-tabs" id="tab4">
+            <input type="radio" name="main-tabs" id="tab5">
+            <input type="radio" name="main-tabs" id="tab6">
+            
+            <input type="radio" name="shop-tabs" id="shop1" checked>
+            <input type="radio" name="shop-tabs" id="shop2">
+            <input type="radio" name="shop-tabs" id="shop3">
+            <input type="radio" name="shop-tabs" id="shop4">
+            <input type="radio" name="shop-tabs" id="shop5">
+            <input type="radio" name="shop-tabs" id="shop-search-radio">
+            
+            <nav class="tab-menu">
+                <label for="tab1">Sales</label>
+                <label for="tab2">Service</label>
+                <label for="tab3">Rides</label>
+                <label for="tab4">Events</label>
+                <label for="tab5">Blog</label>
+                <label for="tab6">FAQ</label>
+                <label for="shop-toggle">Online Shopping →</label>
+            </nav>
+
+            <nav class="shop-menu">
+                <label for="shop1">Bikes</label>
+                <label for="shop2">Parts & Accessories</label>
+                <label for="shop3">Apparel</label>
+                <label for="shop4">Clearance</label>
+                <input type="text" id="shop-search" placeholder="Search...">
+                <label for="shop5">Shopping Cart</label>
+                <label for="shop-toggle">← Home</label>
+            </nav>
+
+            <main class="tab-panes">
+                <div class="pane" id="pane1"><p>We sell Giant, Liv, Momentum, Mondraker, Fairdale, and Panorama.</p></div>
+                <div class="pane" id="pane2"><p>We are a full service shop. Whether it's a flat tire or a complete overhaul, we can fix it.</p></div>
+                <div class="pane" id="pane3"><p>Join us for a ride in Cameron Park when the shop closes on Thursdays. Roll out at 6:15. Bring your lights.</p></div>
+                <div class="pane" id="pane4"><p>No events currently in the works. Watch this space!</p></div>
+                <div class="pane" id="pane5"><p>No posts yet.</p></div>
+                <div class="pane" id="pane6"><h3>Do you sell tubes?</h3><p>Yes.</p></div>
+                
+                <div class="pane" id="spane1"><p>Online shopping is not implemented. Check back later!</p></div>
+                <div class="pane" id="spane2"><p>Online shopping is not implemented. Check back later!</p></div>
+                <div class="pane" id="spane3"><p>Online shopping is not implemented. Check back later!</p></div>
+                <div class="pane" id="spane4"><p>Online shopping is not implemented. Check back later!</p></div>
+                <div class="pane" id="spane5"><p>Online shopping is not implemented. Check back later!</p></div>
+                <div class="pane" id="spane-search"><p>Search is not implemented.</p></div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Synchronizes the search input focus state with the underlying radio logic for tab consistency
+        document.getElementById('shop-search').addEventListener('focus', () => {
+            document.getElementById('shop-search-radio').checked = true;
+        });
+    </script>
+</body>
+</html>
