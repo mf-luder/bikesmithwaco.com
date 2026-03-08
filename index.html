@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@360;500;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@360;500;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cousine&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@360;500;700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cousine&amp;display=swap" rel="stylesheet">
     <title>Shop Mockup</title>
     <style>
         /* DESIGN TOKENS: Central variables for consistent theme management */
@@ -27,7 +26,6 @@
 
         html, body { 
             height: 100%; 
-            overflow-x: hidden;
         }
 
         /* LAYOUT CORE: Flexbox body handles the vertical stacking of header and content */
@@ -108,15 +106,14 @@
         .mobile-nav, .shopping-nav {
             display: none;
             width: 100%;
-            background-color: #000;
-            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-content);
             border-bottom: 1px solid var(--border-color);
         }
 
         .mobile-nav a, .shopping-nav a {
             display: block;
             padding: 15px;
-            color: #fff;
+            color: var(--text-dim);
             text-decoration: none;
             text-align: center;
             border-bottom: 1px solid var(--border-color);
@@ -268,8 +265,6 @@
         /* MOBILE OVERRIDES                                                           */
         /* -------------------------------------------------------------------------- */
         @media (max-width: 768px) {
-            body { background-color: #000; font-family: 'Roboto', sans-serif; }
-            
             .divider, .intro {
                 display: none !important;
             }
@@ -286,7 +281,8 @@
 
             .mobile-menu-btn, .mobile-shop-btn {
                 display: inline-block;
-                border: 1px solid #aaa; border-radius: 4px;
+                border: 1px solid #aaa;
+                border-radius: 4px;
                 color: #fff;
                 padding: 10px;
                 min-width: 90px;
@@ -359,7 +355,7 @@
 
         <nav class="shopping-nav">
             <a href="#shop1">Bikes</a>
-            <a href="#shop2">Parts & Accessories</a>
+            <a href="#shop2">Parts &amp; Accessories</a>
             <a href="#shop3">Apparel</a>
             <a href="#shop4">Clearance</a>
             <a href="#shop-search-radio">Search</a>
@@ -381,14 +377,14 @@
         <input type="checkbox" id="shop-toggle">
         
         <div class="tabs">
-            <input type="radio" name="main-tabs" id="tab1" checked>
+            <input type="radio" name="main-tabs" id="tab1" checked="">
             <input type="radio" name="main-tabs" id="tab2">
             <input type="radio" name="main-tabs" id="tab3">
             <input type="radio" name="main-tabs" id="tab4">
             <input type="radio" name="main-tabs" id="tab5">
             <input type="radio" name="main-tabs" id="tab6">
             
-            <input type="radio" name="shop-tabs" id="shop1" checked>
+            <input type="radio" name="shop-tabs" id="shop1" checked="">
             <input type="radio" name="shop-tabs" id="shop2">
             <input type="radio" name="shop-tabs" id="shop3">
             <input type="radio" name="shop-tabs" id="shop4">
@@ -407,7 +403,7 @@
 
             <nav class="shop-menu">
                 <label for="shop1">Bikes</label>
-                <label for="shop2">Parts & Accessories</label>
+                <label for="shop2">Parts &amp; Accessories</label>
                 <label for="shop3">Apparel</label>
                 <label for="shop4">Clearance</label>
                 <label for="shop-search-radio">Search</label>
@@ -453,7 +449,8 @@
         document.querySelectorAll('.mobile-nav a').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                document.getElementById(link.getAttribute('href').substring(1)).checked = true;
+                const targetId = link.getAttribute('href').substring(1);
+                document.getElementById(targetId).checked = true;
                 document.getElementById('shop-toggle').checked = false;
                 menuToggle.checked = false;
             });
@@ -462,7 +459,8 @@
         document.querySelectorAll('.shopping-nav a').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                document.getElementById(link.getAttribute('href').substring(1)).checked = true;
+                const targetId = link.getAttribute('href').substring(1);
+                document.getElementById(targetId).checked = true;
                 document.getElementById('shop-toggle').checked = true;
                 shopMenuToggle.checked = false;
             });
