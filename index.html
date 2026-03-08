@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@360;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@360;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cousine&display=swap" rel="stylesheet">
     <title>Shop Mockup</title>
@@ -26,6 +27,7 @@
 
         html, body { 
             height: 100%; 
+            overflow-x: hidden;
         }
 
         /* LAYOUT CORE: Flexbox body handles the vertical stacking of header and content */
@@ -49,7 +51,7 @@
         }
 
         /* STATE MANAGEMENT: Hides radio/checkbox inputs while maintaining keyboard accessibility */
-        input[type="radio"], #shop-toggle {
+        input[type="radio"], #shop-toggle, #mobile-menu-toggle, #mobile-shop-toggle {
             position: absolute;
             width: 1px;
             height: 1px;
@@ -90,6 +92,35 @@
             background-position: center;
             z-index: 1;
             transform: translateY(0px);
+        }
+
+        .mobile-menu-btn, .mobile-shop-btn {
+            display: none;
+            cursor: pointer;
+            font-family: 'Cousine', monospace;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            z-index: 10;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .mobile-nav, .shopping-nav {
+            display: none;
+            width: 100%;
+            background-color: #000;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .mobile-nav a, .shopping-nav a {
+            display: block;
+            padding: 15px;
+            color: #fff;
+            text-decoration: none;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            font-family: 'Cousine', monospace;
         }
 
         /* INTRO SECTION: Centered contact and slogan block with z-index for layering resolution */
@@ -234,51 +265,72 @@
         }
 
         /* -------------------------------------------------------------------------- */
-        /* MOBILE OVERRIDES: Responsive adjustments for small viewports (< 768px)     */
+        /* MOBILE OVERRIDES                                                           */
         /* -------------------------------------------------------------------------- */
         @media (max-width: 768px) {
-            :root {
-                --content-padding: 1rem; /* Reclaim horizontal space for mobile text */
+            body { background-color: #000; font-family: 'Roboto', sans-serif; }
+            
+            .divider, .intro {
+                display: none !important;
             }
 
             .hero-container {
-                margin-top: 0;
-                margin-bottom: -40px; /* Reduced vertical overlap to save screen height */
-            }
-
-            /* Stack intro items vertically to avoid horizontal collision */
-            .intro {
-                flex-direction: column;
-                text-align: center;
-                gap: 1.5rem;
-                margin-top: 2rem;
-            }
-
-            .intro-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
                 width: 100%;
-                text-align: center !important;
-                margin-bottom: 0;
+                margin: 0;
+                padding: 15px 0;
+                position: relative;
             }
 
-            /* Multi-row menu layout: Labels wrap instead of causing horizontal overflow */
+            .mobile-menu-btn, .mobile-shop-btn {
+                display: inline-block;
+                border: 1px solid #aaa; border-radius: 4px;
+                color: #fff;
+                padding: 10px;
+                min-width: 90px;
+                text-align: center;
+                box-sizing: border-box;
+            }
+
+            .mobile-menu-btn {
+                padding-left: 10px;
+                margin-left: 20px;
+                z-index: 10;
+            }
+
+            .header-image {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                max-width: 100%;
+            }
+
+            .mobile-shop-btn {
+                padding-right: 10px;
+                margin-right: 20px;
+                z-index: 10;
+            }
+
+            #mobile-menu-toggle:checked ~ .mobile-nav,
+            #mobile-shop-toggle:checked ~ .shopping-nav {
+                display: block;
+            }
+
+            .content {
+                background-color: #000;
+                border: none;
+                border-radius: 0;
+            }
+
             .tab-menu, .shop-menu {
-                flex-wrap: wrap;
-                justify-content: center;
+                display: none !important;
             }
 
-            /* Increased touch targets and row wrapping for easier thumb navigation */
-            .tab-menu label, .shop-menu label, #shop-search {
-                flex: 1 1 auto;
-                text-align: center;
-                min-width: 120px;
-                border: 1px solid var(--border-color) !important;
-            }
-
-            /* Anchors the toggle label as a dedicated row at the bottom of the menu */
-            .tab-menu label[for="shop-toggle"], 
-            .shop-menu label[for="shop-toggle"] {
-                width: 100%;
-                margin-left: 0;
+            header:has(#mobile-menu-toggle:checked) ~ .content,
+            header:has(#mobile-shop-toggle:checked) ~ .content {
+                display: none;
             }
         }
 
@@ -287,10 +339,32 @@
 </head>
 <body>
     <header>
+        <input type="checkbox" id="mobile-menu-toggle">
+        <input type="checkbox" id="mobile-shop-toggle">
         <div class="hero-container">
+            <label for="mobile-menu-toggle" class="mobile-menu-btn">Info</label>
             <div class="divider"></div>
             <img src="Bikesmith_logo1_custom.png" alt="Header Image" class="header-image">
+            <label for="mobile-shop-toggle" class="mobile-shop-btn">Shopping</label>
         </div>
+
+        <nav class="mobile-nav">
+            <a href="#tab1">Sales</a>
+            <a href="#tab2">Service</a>
+            <a href="#tab3">Rides</a>
+            <a href="#tab4">Events</a>
+            <a href="#tab5">Blog</a>
+            <a href="#tab6">FAQ</a>
+        </nav>
+
+        <nav class="shopping-nav">
+            <a href="#shop1">Bikes</a>
+            <a href="#shop2">Parts & Accessories</a>
+            <a href="#shop3">Apparel</a>
+            <a href="#shop4">Clearance</a>
+            <a href="#shop-search-radio">Search</a>
+            <a href="#shop5">Shopping Cart</a>
+        </nav>
 
         <div class="intro">
             <div class="intro-item left">
@@ -336,13 +410,14 @@
                 <label for="shop2">Parts & Accessories</label>
                 <label for="shop3">Apparel</label>
                 <label for="shop4">Clearance</label>
+                <label for="shop-search-radio">Search</label>
                 <input type="text" id="shop-search" placeholder="Search...">
                 <label for="shop5">Shopping Cart</label>
                 <label for="shop-toggle">← Home</label>
             </nav>
 
             <main class="tab-panes">
-                <div class="pane" id="pane1"><p>We sell Giant, Liv, Momentum, Mondraker, Fairdale, and Panorama.</p></div>
+                <div class="pane" id="pane1"><p>We sell Giant, Lin, Momentum, Mondraker, Fairdale, and Panorama.</p></div>
                 <div class="pane" id="pane2"><p>We are a full service shop. Whether it's a flat tire or a complete overhaul, we can fix it.</p></div>
                 <div class="pane" id="pane3"><p>Join us for a ride in Cameron Park when the shop closes on Thursdays. Roll out at 6:15. Bring your lights.</p></div>
                 <div class="pane" id="pane4"><p>No events currently in the works. Watch this space!</p></div>
@@ -360,8 +435,37 @@
     </div>
 
     <script>
+        const menuToggle = document.getElementById('mobile-menu-toggle');
+        const shopMenuToggle = document.getElementById('mobile-shop-toggle');
+
+        menuToggle.addEventListener('change', () => {
+            if (menuToggle.checked) shopMenuToggle.checked = false;
+        });
+
+        shopMenuToggle.addEventListener('change', () => {
+            if (shopMenuToggle.checked) menuToggle.checked = false;
+        });
+
         document.getElementById('shop-search').addEventListener('focus', () => {
             document.getElementById('shop-search-radio').checked = true;
+        });
+
+        document.querySelectorAll('.mobile-nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById(link.getAttribute('href').substring(1)).checked = true;
+                document.getElementById('shop-toggle').checked = false;
+                menuToggle.checked = false;
+            });
+        });
+
+        document.querySelectorAll('.shopping-nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById(link.getAttribute('href').substring(1)).checked = true;
+                document.getElementById('shop-toggle').checked = true;
+                shopMenuToggle.checked = false;
+            });
         });
     </script>
 </body>
